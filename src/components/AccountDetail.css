@@ -1,0 +1,55 @@
+/* Account Detail Specific Styles */
+
+/* Navigation Actions */
+.account-detail .navigation-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.account-detail .reputation-badge {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Links */
+.account-detail .internal-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.account-detail .internal-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.account-detail .external-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.account-detail .external-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .account-detail .navigation-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .account-detail .reputation-badge {
+    width: 100%;
+    text-align: center;
+  }
+}
