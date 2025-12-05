@@ -80,10 +80,6 @@ src/
 └── main.jsx           # Entry point
 ```
 
-## Zattera API
-
-The explorer connects to Zattera RPC nodes via JSON-RPC 2.0 protocol.
-
 ### Configuration
 
 The RPC endpoint is configured via environment variable:
