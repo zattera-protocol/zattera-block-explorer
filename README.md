@@ -144,4 +144,10 @@ Block producers that validate transactions and secure the network.
 
 ## License
 
-MIT
+This software is provided under the MIT License. See [LICENSE.md](LICENSE.md) for full terms.
+
+```
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+```
