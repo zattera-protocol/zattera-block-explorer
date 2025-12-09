@@ -1,42 +1,33 @@
-// Zattera RPC API endpoints
-const RPC_NODES = [
-  '/rpc',
-];
-
-let currentNodeIndex = 0;
+// Zattera RPC API endpoint
+// Production: use direct URL from env variable
+// Development: use proxy (/rpc)
+const IS_PRODUCTION = import.meta.env.MODE === 'production'
+const RPC_NODE = IS_PRODUCTION ? import.meta.env.VITE_ZATTERA_RPC_URL : '/rpc';
 
 /**
  * Make RPC call to Zattera API using the new call format
  */
 const rpcCall = async (api, method, params = {}) => {
-  const node = RPC_NODES[currentNodeIndex];
+  const response = await fetch(RPC_NODE, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      jsonrpc: '2.0',
+      method: 'call',
+      params: [api, method, params],
+      id: 1,
+    }),
+  });
 
-  try {
-    const response = await fetch(node, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        jsonrpc: '2.0',
-        method: 'call',
-        params: [api, method, params],
-        id: 1,
-      }),
-    });
+  const data = await response.json();
 
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error(data.error.message);
-    }
-
-    return data.result;
-  } catch (error) {
-    // Try next node on failure
-    currentNodeIndex = (currentNodeIndex + 1) % RPC_NODES.length;
-    throw error;
+  if (data.error) {
+    throw new Error(data.error.message);
   }
+
+  return data.result;
 };
 
 /**
@@ -237,7 +228,7 @@ export const getDiscussions = async (sortBy = 'trending', query = {}) => {
     }
 
     // Use direct method call format for tags_api
-    const response = await fetch(RPC_NODES[currentNodeIndex], {
+    const response = await fetch(RPC_NODE, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

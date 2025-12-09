@@ -1,13 +1,16 @@
 import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '')
 
-  return {
+  const config = {
     plugins: [react()],
-    server: {
+  }
+
+  // Development mode: use proxy
+  if (mode === 'development') {
+    config.server = {
       proxy: {
         '/rpc': {
           target: env.VITE_ZATTERA_RPC_URL || 'http://localhost:8090',
@@ -15,6 +18,8 @@ export default defineConfig(({ mode }) => {
           rewrite: (path) => path.replace(/^\/rpc/, ''),
         },
       },
-    },
+    }
   }
+
+  return config
 })
