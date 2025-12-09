@@ -63,23 +63,6 @@ npm run preview
 npm run lint
 ```
 
-## Project Structure
-
-```
-src/
-├── components/         # Reusable UI components
-│   ├── BlockList.jsx   # Block list with real-time updates
-│   ├── BlockDetail.jsx # Detailed block information
-│   └── SearchBar.jsx   # Search functionality
-├── pages/             # Page components
-│   ├── HomePage.jsx   # Main page with block list
-│   └── BlockPage.jsx  # Individual block detail page
-├── services/          # API integration
-│   └── zatteraApi.js  # Zattera RPC API client
-├── App.jsx            # Main app with routing
-└── main.jsx           # Entry point
-```
-
 ### Configuration
 
 The RPC endpoint is configured via environment variable:
