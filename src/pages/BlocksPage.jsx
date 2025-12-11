@@ -20,8 +20,9 @@ function BlocksPage() {
         setLatestBlock(latest);
 
         const endBlock = latest - (currentPage - 1) * blocksPerPage;
-        const startBlock = endBlock - blocksPerPage + 1;
-        const fetchedBlocks = await getBlocks(startBlock, blocksPerPage);
+        const startBlock = Math.max(1, endBlock - blocksPerPage + 1);
+        const actualCount = endBlock - startBlock + 1;
+        const fetchedBlocks = await getBlocks(startBlock, actualCount);
 
         setBlocks(fetchedBlocks.reverse());
         setLoading(false);
