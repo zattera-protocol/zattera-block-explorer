@@ -123,35 +123,35 @@ const AccountDetail = ({ account }) => {
         <div className="detail-grid">
           <div className="detail-item">
             <span className="label">ZTR Balance:</span>
-            <span className="value">{formatToken(account.balance)}</span>
+            <span className="value">{formatToken(account.liquid_balance)}</span>
           </div>
           <div className="detail-item">
             <span className="label">Zattera Power:</span>
-            <span className="value">{formatToken(account.vesting_shares)}</span>
+            <span className="value">{formatToken(account.vesting_share_balance)}</span>
           </div>
           <div className="detail-item">
             <span className="label">ZBD Balance:</span>
-            <span className="value">{formatToken(account.sbd_balance)}</span>
+            <span className="value">{formatToken(account.dollar_balance)}</span>
           </div>
           <div className="detail-item">
             <span className="label">Savings ZTR:</span>
-            <span className="value">{formatToken(account.savings_balance)}</span>
+            <span className="value">{formatToken(account.savings_liquid_balance)}</span>
           </div>
           <div className="detail-item">
             <span className="label">Savings ZBD:</span>
-            <span className="value">{formatToken(account.savings_sbd_balance)}</span>
+            <span className="value">{formatToken(account.savings_dollar_balance)}</span>
           </div>
           <div className="detail-item">
             <span className="label">Pending ZTR Rewards:</span>
-            <span className="value">{formatToken(account.reward_ztr_balance)}</span>
+            <span className="value">{formatToken(account.reward_liquid_balance)}</span>
           </div>
           <div className="detail-item">
             <span className="label">Pending ZBD Rewards:</span>
-            <span className="value">{formatToken(account.reward_sbd_balance)}</span>
+            <span className="value">{formatToken(account.reward_dollar_balance)}</span>
           </div>
           <div className="detail-item">
             <span className="label">Pending ZP Rewards:</span>
-            <span className="value">{formatToken(account.reward_vesting_balance)}</span>
+            <span className="value">{formatToken(account.reward_vesting_share_balance)}</span>
           </div>
         </div>
       </div>
