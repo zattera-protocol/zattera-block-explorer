@@ -27,8 +27,8 @@ const formatVestingShares = (shares) => {
   return 'N/A';
 };
 
-// Helper function to calculate ZTR per VESTS
-const calculateZatteraPerVests = (totalVestingFund, totalVestingShares) => {
+// Helper function to calculate Liquid per VESTS
+const calculateLiquidPerVests = (totalVestingFund, totalVestingShares) => {
   if (!totalVestingFund || !totalVestingShares) return 'N/A';
 
   const vestingFundAmount = typeof totalVestingFund === 'object'
@@ -41,17 +41,17 @@ const calculateZatteraPerVests = (totalVestingFund, totalVestingShares) => {
 
   if (vestingSharesAmount === 0) return 'N/A';
 
-  const ztrPerVests = vestingFundAmount / vestingSharesAmount;
-  return ztrPerVests.toFixed(6);
+  const liquidPerVests = vestingFundAmount / vestingSharesAmount;
+  return liquidPerVests.toFixed(6);
 };
 
 function DashboardPage() {
   const [stats, setStats] = useState({
     headBlockNumber: 0,
     totalAccounts: '',
-    currentSupply: '',
-    virtualSupply: '',
-    ztrPerVests: 'N/A',
+    currentLiquidSupply: '',
+    virtualLiquidSupply: '',
+    liquidPerVests: 'N/A',
     recentBlocks: [],
   });
   const [loading, setLoading] = useState(true);
@@ -67,9 +67,9 @@ function DashboardPage() {
         setStats({
           headBlockNumber: latestBlockNum,
           totalAccounts: formatVestingShares(props.total_vesting_shares),
-          currentSupply: formatAsset(props.current_supply),
-          virtualSupply: formatAsset(props.virtual_supply),
-          ztrPerVests: calculateZatteraPerVests(props.total_vesting_fund_ztr, props.total_vesting_shares),
+          currentLiquidSupply: formatAsset(props.current_liquid_supply),
+          virtualLiquidSupply: formatAsset(props.virtual_liquid_supply),
+          liquidPerVests: calculateLiquidPerVests(props.total_vesting_fund_liquid, props.total_vesting_shares),
           recentBlocks: blocks.reverse(),
         });
         setLoading(false);
@@ -108,8 +108,8 @@ function DashboardPage() {
             <Coins size={32} strokeWidth={2} />
           </div>
           <div className="stat-content">
-            <div className="stat-label">{t('dashboard.stats.currentSupply')}</div>
-            <div className="stat-value">{stats.currentSupply}</div>
+            <div className="stat-label">{t('dashboard.stats.currentLiquidSupply')}</div>
+            <div className="stat-value">{stats.currentLiquidSupply}</div>
           </div>
         </div>
 
@@ -118,8 +118,8 @@ function DashboardPage() {
             <TrendingUp size={32} strokeWidth={2} />
           </div>
           <div className="stat-content">
-            <div className="stat-label">{t('dashboard.stats.virtualSupply')}</div>
-            <div className="stat-value">{stats.virtualSupply}</div>
+            <div className="stat-label">{t('dashboard.stats.virtualLiquidSupply')}</div>
+            <div className="stat-value">{stats.virtualLiquidSupply}</div>
           </div>
         </div>
 
@@ -138,8 +138,8 @@ function DashboardPage() {
             <DollarSign size={32} strokeWidth={2} />
           </div>
           <div className="stat-content">
-            <div className="stat-label">{t('dashboard.stats.ztrPerVests')}</div>
-            <div className="stat-value">{stats.ztrPerVests} ZTR</div>
+            <div className="stat-label">{t('dashboard.stats.liquidPerVests')}</div>
+            <div className="stat-value">{stats.liquidPerVests} ZTR</div>
           </div>
         </div>
       </div>
