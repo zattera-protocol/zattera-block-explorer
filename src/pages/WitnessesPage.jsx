@@ -67,7 +67,7 @@ function WitnessesPage() {
                 </div>
                 <div className="witness-detail-item">
                   <span className="detail-label">{t('witnesses.price')}:</span>
-                  <span className="detail-value">{formatAsset(witness.sbd_exchange_rate?.base)}</span>
+                  <span className="detail-value">{formatAsset(witness.dollar_exchange_rate?.base)}</span>
                 </div>
                 <div className="witness-detail-item">
                   <span className="detail-label">{t('witnesses.blockSize')}:</span>
