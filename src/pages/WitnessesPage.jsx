@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getWitnessesByVote } from '../services/zatteraApi.js';
+import { WitnessesPageSkeleton } from '../components/SkeletonLoader';
 import { useTranslation } from '../i18n.jsx';
 import './WitnessesPage.css';
 
@@ -38,7 +39,7 @@ function WitnessesPage() {
   }, []);
 
   if (loading) {
-    return <div className="witnesses-loading">{t('witnesses.loading')}</div>;
+    return <WitnessesPageSkeleton />;
   }
 
   return (

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { TrendingUp, Clock, Flame, DollarSign, ThumbsUp, MessageCircle } from 'lucide-react';
 import { getDiscussions } from '../services/zatteraApi.js';
+import { PostsPageSkeleton } from '../components/SkeletonLoader';
 import { useTranslation } from '../i18n.jsx';
 import { formatTimestampWithLocale } from '../utils/format';
 import './PostsPage.css';
@@ -92,7 +93,7 @@ function PostsPage() {
   };
 
   if (loading) {
-    return <div className="posts-loading">{t('posts.loading')}</div>;
+    return <PostsPageSkeleton />;
   }
 
   return (

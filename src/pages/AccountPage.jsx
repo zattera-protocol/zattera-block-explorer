@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getAccount } from '../services/zatteraApi';
 import AccountDetail from '../components/AccountDetail';
 import DetailLayout from '../components/DetailLayout';
+import { AccountDetailSkeleton } from '../components/SkeletonLoader';
 
 const AccountPage = () => {
   const { username } = useParams();
@@ -48,15 +49,7 @@ const AccountPage = () => {
   }, [username]);
 
   if (loading) {
-    return (
-      <DetailLayout
-        className="account-detail"
-        title={username ? `@${username}` : 'Account'}
-        backTo="/"
-      >
-        <div className="loading">Loading account...</div>
-      </DetailLayout>
-    );
+    return <AccountDetailSkeleton />;
   }
 
   if (error) {

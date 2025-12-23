@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getLatestBlockNum, getBlocks } from '../services/zatteraApi';
 import BlockTable from '../components/BlockTable';
+import { BlocksPageSkeleton } from '../components/SkeletonLoader';
 import { useTranslation } from '../i18n.jsx';
 import './BlocksPage.css';
 
@@ -48,7 +49,7 @@ function BlocksPage() {
   const totalPages = Math.ceil(latestBlock / blocksPerPage);
 
   if (loading) {
-    return <div className="blocks-loading">{t('blocksPage.loading')}</div>;
+    return <BlocksPageSkeleton />;
   }
 
   return (

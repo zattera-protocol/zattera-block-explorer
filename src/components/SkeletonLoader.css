@@ -99,6 +99,91 @@
   margin-top: 10px;
 }
 
+/* Dashboard Skeletons */
+.skeleton-stat-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.skeleton-stat-label {
+  width: 140px;
+}
+
+.skeleton-stat-value {
+  width: 100px;
+  height: 28px;
+}
+
+/* Blocks Page Skeletons */
+.skeleton-info-badge {
+  width: 150px;
+}
+
+.skeleton-size {
+  width: 70px;
+}
+
+/* Account Detail Skeletons */
+.skeleton-account-value {
+  width: 250px;
+}
+
+/* Posts Page Skeletons */
+.skeleton-sort-button {
+  width: 80px;
+}
+
+.skeleton-post-author {
+  width: 100px;
+}
+
+.skeleton-post-category {
+  width: 80px;
+}
+
+.skeleton-post-title {
+  width: 80%;
+  height: 24px;
+}
+
+.skeleton-post-body {
+  height: 60px;
+  margin: 10px 0;
+}
+
+.skeleton-post-stat {
+  width: 60px;
+}
+
+.skeleton-post-time {
+  width: 120px;
+}
+
+/* Witnesses Page Skeletons */
+.skeleton-rank {
+  width: 40px;
+  height: 24px;
+}
+
+.skeleton-witness-rank-number {
+  color: #999;
+  opacity: 0.6;
+}
+
+.skeleton-witness-name {
+  width: 150px;
+  height: 20px;
+}
+
+.skeleton-detail-label {
+  width: 100px;
+}
+
+.skeleton-detail-value {
+  width: 120px;
+}
+
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
   .skeleton {

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Box, Coins, TrendingUp, Database, DollarSign } from 'lucide-react';
 import { getLatestBlockNum, getBlocks, getDynamicGlobalProperties } from '../services/zatteraApi.js';
 import BlockTable from '../components/BlockTable';
+import { DashboardSkeleton } from '../components/SkeletonLoader';
 import { useTranslation } from '../i18n.jsx';
 import { formatCompactNumber } from '../utils/format';
 import './DashboardPage.css';
@@ -85,7 +86,7 @@ function DashboardPage() {
   }, []);
 
   if (loading) {
-    return <div className="dashboard-loading">{t('dashboard.loading')}</div>;
+    return <DashboardSkeleton />;
   }
 
   return (
