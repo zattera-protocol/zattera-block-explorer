@@ -53,7 +53,7 @@ export const BlockDetailSkeleton = () => {
     <div className="detail-page block-detail">
       <div className="navigation">
         <Link to="/blocks" className="back-button">
-          ← Back
+          ← {t('common.back')}
         </Link>
         <div className="navigation-actions">
           <button className="nav-button disabled" disabled>
@@ -241,11 +241,13 @@ export const BlocksPageSkeleton = () => {
 };
 
 export const AccountDetailSkeleton = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="detail-page account-detail">
       <div className="navigation">
         <Link to="/" className="back-button">
-          ← Back
+          ← {t('common.back')}
         </Link>
       </div>
 
@@ -254,7 +256,7 @@ export const AccountDetailSkeleton = () => {
       </h2>
 
       <div className="detail-section">
-        <h3>Profile Information</h3>
+        <h3>{t('account.profileInfo')}</h3>
         <div className="detail-grid">
           {[...Array(3)].map((_, index) => (
             <div key={index} className="detail-item">
@@ -270,7 +272,7 @@ export const AccountDetailSkeleton = () => {
       </div>
 
       <div className="detail-section">
-        <h3>Account Balances</h3>
+        <h3>{t('account.balances')}</h3>
         <div className="detail-grid">
           {[...Array(8)].map((_, index) => (
             <div key={index} className="detail-item">
@@ -286,7 +288,7 @@ export const AccountDetailSkeleton = () => {
       </div>
 
       <div className="detail-section">
-        <h3>Activity Statistics</h3>
+        <h3>{t('account.activity')}</h3>
         <div className="detail-grid">
           {[...Array(6)].map((_, index) => (
             <div key={index} className="detail-item">
@@ -302,7 +304,7 @@ export const AccountDetailSkeleton = () => {
       </div>
 
       <div className="detail-section">
-        <h3>Security Information</h3>
+        <h3>{t('account.security')}</h3>
         <div className="detail-grid">
           {[...Array(2)].map((_, index) => (
             <div key={index} className="detail-item">

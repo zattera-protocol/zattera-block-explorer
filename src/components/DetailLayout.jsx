@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from '../i18n.jsx';
 
 const DetailLayout = ({
   title,
@@ -8,18 +9,20 @@ const DetailLayout = ({
   className = '',
   children,
 }) => {
+  const { t } = useTranslation();
+
   const renderBackButton = () => {
     if (onBack) {
       return (
         <button type="button" className="back-button" onClick={onBack}>
-          ← Back
+          ← {t('common.back')}
         </button>
       );
     }
 
     return (
       <Link to={backTo} className="back-button">
-        ← Back
+        ← {t('common.back')}
       </Link>
     );
   };
