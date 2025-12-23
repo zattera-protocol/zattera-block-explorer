@@ -1,5 +1,6 @@
 import './SkeletonLoader.css';
 import { useTranslation } from '../i18n.jsx';
+import { Link } from 'react-router-dom';
 
 export const BlockListSkeleton = () => {
   const { t } = useTranslation();
@@ -46,13 +47,21 @@ export const BlockListSkeleton = () => {
 };
 
 export const BlockDetailSkeleton = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="detail-page block-detail">
       <div className="navigation">
-        <span className="skeleton skeleton-text skeleton-back-button"></span>
+        <Link to="/blocks" className="back-button">
+          ← Back
+        </Link>
         <div className="navigation-actions">
-          <span className="skeleton skeleton-text skeleton-nav-button"></span>
-          <span className="skeleton skeleton-text skeleton-nav-button"></span>
+          <button className="nav-button disabled" disabled>
+            {t('blockDetail.previousBlock')}
+          </button>
+          <button className="nav-button disabled" disabled>
+            {t('blockDetail.nextBlock')}
+          </button>
         </div>
       </div>
 
@@ -60,29 +69,41 @@ export const BlockDetailSkeleton = () => {
         <span className="skeleton skeleton-text skeleton-title"></span>
       </h2>
 
-      <div className="block-info">
-        {[...Array(5)].map((_, index) => (
-          <div key={index} className="info-row">
-            <span className="skeleton skeleton-text skeleton-label"></span>
-            <span className="skeleton skeleton-text skeleton-value"></span>
-          </div>
-        ))}
+      <div className="detail-section">
+        <h3>{t('blockDetail.info')}</h3>
+        <div className="detail-grid">
+          {[...Array(6)].map((_, index) => (
+            <div key={index} className="detail-item">
+              <span className="label">
+                <span className="skeleton skeleton-text skeleton-label"></span>
+              </span>
+              <span className="value">
+                <span className="skeleton skeleton-text skeleton-value"></span>
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <h3>
-        <span className="skeleton skeleton-text skeleton-subtitle"></span>
-      </h3>
-
-      <div className="transactions">
-        {[...Array(3)].map((_, index) => (
-          <div key={index} className="transaction">
-            <div className="tx-header">
-              <span className="skeleton skeleton-text skeleton-tx-index"></span>
-              <span className="skeleton skeleton-text skeleton-tx-ops"></span>
+      <div className="detail-section">
+        <h3>{t('blockDetail.transactions', { count: 0 })}</h3>
+        <div className="transactions-list">
+          {[...Array(3)].map((_, index) => (
+            <div key={index} className="transaction-card">
+              <div className="transaction-header">
+                <span className="transaction-title">
+                  <span className="skeleton skeleton-text skeleton-tx-index"></span>
+                </span>
+                <span className="transaction-meta">
+                  <span className="skeleton skeleton-text skeleton-tx-ops"></span>
+                </span>
+              </div>
+              <div className="operations-list">
+                <span className="skeleton skeleton-box skeleton-operations"></span>
+              </div>
             </div>
-            <div className="skeleton skeleton-box skeleton-operations"></div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -220,25 +241,80 @@ export const BlocksPageSkeleton = () => {
 };
 
 export const AccountDetailSkeleton = () => {
-  const { t } = useTranslation();
-
   return (
     <div className="detail-page account-detail">
       <div className="navigation">
-        <span className="skeleton skeleton-text skeleton-back-button"></span>
+        <Link to="/" className="back-button">
+          ← Back
+        </Link>
       </div>
 
       <h2>
         <span className="skeleton skeleton-text skeleton-title"></span>
       </h2>
 
-      <div className="account-info">
-        {[...Array(8)].map((_, index) => (
-          <div key={index} className="info-row">
-            <span className="skeleton skeleton-text skeleton-label"></span>
-            <span className="skeleton skeleton-text skeleton-value"></span>
-          </div>
-        ))}
+      <div className="detail-section">
+        <h3>Profile Information</h3>
+        <div className="detail-grid">
+          {[...Array(3)].map((_, index) => (
+            <div key={index} className="detail-item">
+              <span className="label">
+                <span className="skeleton skeleton-text skeleton-label"></span>
+              </span>
+              <span className="value">
+                <span className="skeleton skeleton-text skeleton-value"></span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="detail-section">
+        <h3>Account Balances</h3>
+        <div className="detail-grid">
+          {[...Array(8)].map((_, index) => (
+            <div key={index} className="detail-item">
+              <span className="label">
+                <span className="skeleton skeleton-text skeleton-label"></span>
+              </span>
+              <span className="value">
+                <span className="skeleton skeleton-text skeleton-value"></span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="detail-section">
+        <h3>Activity Statistics</h3>
+        <div className="detail-grid">
+          {[...Array(6)].map((_, index) => (
+            <div key={index} className="detail-item">
+              <span className="label">
+                <span className="skeleton skeleton-text skeleton-label"></span>
+              </span>
+              <span className="value">
+                <span className="skeleton skeleton-text skeleton-value"></span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="detail-section">
+        <h3>Security Information</h3>
+        <div className="detail-grid">
+          {[...Array(2)].map((_, index) => (
+            <div key={index} className="detail-item">
+              <span className="label">
+                <span className="skeleton skeleton-text skeleton-label"></span>
+              </span>
+              <span className="value">
+                <span className="skeleton skeleton-text skeleton-value"></span>
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
