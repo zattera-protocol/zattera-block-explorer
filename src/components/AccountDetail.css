@@ -10,10 +10,10 @@
 .account-detail .reputation-badge {
   background: var(--primary-color);
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 0.9rem;
   border-radius: 20px;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.81rem;
 }
 
 /* Links */
