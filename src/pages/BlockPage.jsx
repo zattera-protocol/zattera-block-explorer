@@ -3,13 +3,14 @@ import { useParams, Link } from 'react-router-dom';
 import BlockDetail from '../components/BlockDetail';
 import DetailLayout from '../components/DetailLayout';
 import { BlockDetailSkeleton } from '../components/SkeletonLoader';
-import { getBlock } from '../services/zatteraApi';
+import { getBlock, getDynamicGlobalProperties } from '../services/zatteraApi';
 
 const BlockPage = () => {
   const { blockNum } = useParams();
   const [block, setBlock] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [lastIrreversibleBlockNum, setLastIrreversibleBlockNum] = useState(null);
 
   useEffect(() => {
     const fetchBlock = async () => {
@@ -25,7 +26,12 @@ const BlockPage = () => {
       }
 
       try {
-        const blockData = await getBlock(parsedBlockNum);
+        // Fetch block data and global properties in parallel
+        const [blockData, globalProps] = await Promise.all([
+          getBlock(parsedBlockNum),
+          getDynamicGlobalProperties()
+        ]);
+
         const normalizedBlock = blockData?.block || blockData;
 
         if (!normalizedBlock) {
@@ -33,6 +39,7 @@ const BlockPage = () => {
           setBlock(null);
         } else {
           setBlock(normalizedBlock);
+          setLastIrreversibleBlockNum(globalProps.last_irreversible_block_num);
         }
       } catch (err) {
         setError(err.message || 'Failed to fetch block');
@@ -72,7 +79,11 @@ const BlockPage = () => {
 
   return (
     <div className="block-page">
-      <BlockDetail blockNum={blockNum} block={block} />
+      <BlockDetail
+        blockNum={blockNum}
+        block={block}
+        lastIrreversibleBlockNum={lastIrreversibleBlockNum}
+      />
     </div>
   );
 };

@@ -58,6 +58,9 @@ const translations = {
     },
     blockDetail: {
       info: 'Block Information',
+      status: 'Status',
+      irreversible: 'Irreversible',
+      reversible: 'Reversible',
       time: 'Time',
       witness: 'Witness',
       transactionCount: 'Transaction Count',
@@ -66,6 +69,8 @@ const translations = {
       transactions: 'Transactions ({count})',
       noTransactions: 'No transactions in this block',
       rawJson: 'Raw JSON Data',
+      previousBlock: 'Previous Block',
+      nextBlock: 'Next Block',
     },
     witnesses: {
       title: 'Witnesses',
@@ -150,6 +155,9 @@ const translations = {
     },
     blockDetail: {
       info: '블록 정보',
+      status: '상태',
+      irreversible: '확정',
+      reversible: '미확정',
       time: '시간',
       witness: '증인',
       transactionCount: '트랜잭션 수',
@@ -158,6 +166,8 @@ const translations = {
       transactions: '트랜잭션 ({count})',
       noTransactions: '트랜잭션이 없습니다',
       rawJson: '원본 JSON 데이터',
+      previousBlock: '이전 블록',
+      nextBlock: '다음 블록',
     },
     witnesses: {
       title: '증인 목록',
@@ -242,6 +252,9 @@ const translations = {
     },
     blockDetail: {
       info: 'ブロック情報',
+      status: 'ステータス',
+      irreversible: '確定済み',
+      reversible: '未確定',
       time: '時間',
       witness: '証人',
       transactionCount: 'トランザクション数',
@@ -250,6 +263,8 @@ const translations = {
       transactions: 'トランザクション ({count})',
       noTransactions: 'トランザクションがありません',
       rawJson: 'RAW JSON データ',
+      previousBlock: '前のブロック',
+      nextBlock: '次のブロック',
     },
     witnesses: {
       title: '証人一覧',

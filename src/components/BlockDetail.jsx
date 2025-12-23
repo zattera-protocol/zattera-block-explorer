@@ -4,7 +4,7 @@ import { useTranslation } from '../i18n.jsx';
 import { formatTimestampWithLocale } from '../utils/format';
 import './BlockDetail.css';
 
-const BlockDetail = ({ blockNum, block }) => {
+const BlockDetail = ({ blockNum, block, lastIrreversibleBlockNum }) => {
   const { t, language } = useTranslation();
   // Format timestamp for display
   const formatTimestamp = (timestamp) => {
@@ -21,6 +21,9 @@ const BlockDetail = ({ blockNum, block }) => {
   const prevBlockNum = blockNumber > 1 ? blockNumber - 1 : null;
   const nextBlockNum = blockNumber + 1;
 
+  // Check if block is irreversible (confirmed by 2/3+ witness consensus)
+  const isIrreversible = lastIrreversibleBlockNum !== null && blockNumber <= lastIrreversibleBlockNum;
+
   return (
     <DetailLayout
       className="block-detail"
@@ -34,13 +37,13 @@ const BlockDetail = ({ blockNum, block }) => {
             aria-disabled={!prevBlockNum}
             onClick={(e) => { if (!prevBlockNum) e.preventDefault(); }}
           >
-            Previous Block
+            {t('blockDetail.previousBlock')}
           </Link>
           <Link
             to={`/block/${nextBlockNum}`}
             className="nav-button"
           >
-            Next Block
+            {t('blockDetail.nextBlock')}
           </Link>
         </>
       )}
@@ -48,6 +51,14 @@ const BlockDetail = ({ blockNum, block }) => {
       <div className="detail-section">
         <h3>{t('blockDetail.info')}</h3>
         <div className="detail-grid">
+          <div className="detail-item">
+            <span className="label">{t('blockDetail.status')}:</span>
+            <span className="value">
+              <span className={`status-badge ${isIrreversible ? 'irreversible' : 'reversible'}`}>
+                {isIrreversible ? t('blockDetail.irreversible') : t('blockDetail.reversible')}
+              </span>
+            </span>
+          </div>
           <div className="detail-item">
             <span className="label">{t('blockDetail.time')}:</span>
             <span className="value">{formatTimestamp(block.timestamp)}</span>
