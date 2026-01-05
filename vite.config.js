@@ -6,6 +6,9 @@ export default defineConfig(({ mode }) => {
 
   const config = {
     plugins: [react()],
+    build: {
+      outDir: 'build',
+    },
   }
 
   // Development mode: use proxy
