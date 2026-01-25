@@ -1,12 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { getWitnessesByVote } from '../services/zatteraApi';
+import type { Witness } from '../types';
 import './WitnessList.css';
 
-const WitnessList = ({ limit = 20 }) => {
-  const [witnesses, setWitnesses] = useState([]);
+interface WitnessListProps {
+  limit?: number;
+}
+
+const WitnessList = ({ limit = 20 }: WitnessListProps) => {
+  const [witnesses, setWitnesses] = useState<Witness[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   const loadWitnesses = useCallback(async () => {
     try {
@@ -16,7 +21,7 @@ const WitnessList = ({ limit = 20 }) => {
       const witnessData = await getWitnessesByVote(limit);
       setWitnesses(witnessData);
     } catch (err) {
-      setError(err.message);
+      setError((err as Error).message);
     } finally {
       setLoading(false);
     }
@@ -26,14 +31,14 @@ const WitnessList = ({ limit = 20 }) => {
     loadWitnesses();
   }, [loadWitnesses]);
 
-  const formatVotes = (votes) => {
+  const formatVotes = (votes: string): string => {
     // Convert VESTS to more readable format (millions)
-    if (!votes || votes === 0) return '0.00M';
+    if (!votes || votes === '0') return '0.00M';
     const votesMillion = (parseInt(votes) / 1000000000000).toFixed(2);
     return `${votesMillion}M`;
   };
 
-  const isTop20Witness = (index) => {
+  const isTop20Witness = (index: number): boolean => {
     return index < 20;
   };
 
@@ -42,7 +47,9 @@ const WitnessList = ({ limit = 20 }) => {
       <div className="witness-list">
         <div className="witness-list-header">
           <h2>Top Witnesses</h2>
-          <p className="witness-description">Witnesses secure the Zattera blockchain by producing blocks</p>
+          <p className="witness-description">
+            Witnesses secure the Zattera blockchain by producing blocks
+          </p>
         </div>
         <div className="loading">Loading witnesses...</div>
       </div>
@@ -76,8 +83,8 @@ const WitnessList = ({ limit = 20 }) => {
       <div className="witness-list-header">
         <h2>Top Witnesses</h2>
         <p className="witness-description">
-          Witnesses secure the Zattera blockchain by producing blocks.
-          Top 20 witnesses produce most blocks, while others share remaining slots.
+          Witnesses secure the Zattera blockchain by producing blocks. Top 20 witnesses produce most
+          blocks, while others share remaining slots.
         </p>
       </div>
 
@@ -93,9 +100,7 @@ const WitnessList = ({ limit = 20 }) => {
           <div key={witness.owner} className="witness-row">
             <div className="witness-rank">#{index + 1}</div>
             <div className="witness-name">
-              <Link to={`/account/${witness.owner}`}>
-                {witness.owner}
-              </Link>
+              <Link to={`/account/${witness.owner}`}>{witness.owner}</Link>
             </div>
             <div className="witness-votes">{formatVotes(witness.votes)}</div>
             <div className="witness-status">

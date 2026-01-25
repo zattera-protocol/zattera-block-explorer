@@ -1,14 +1,19 @@
 import { Link } from 'react-router-dom';
 import DetailLayout from './DetailLayout';
-import { useTranslation } from '../i18n.jsx';
+import { useTranslation } from '../i18n';
+import type { Account, Asset, AccountMetadata } from '../types';
 import './AccountDetail.css';
 
-const AccountDetail = ({ account }) => {
+interface AccountDetailProps {
+  account: Account | null;
+}
+
+const AccountDetail = ({ account }: AccountDetailProps) => {
   const { t } = useTranslation();
   if (!account) return null;
 
   // Parse JSON metadata safely
-  let metadata = {};
+  let metadata: AccountMetadata = {};
   try {
     metadata = account.json_metadata ? JSON.parse(account.json_metadata) : {};
   } catch {
@@ -16,7 +21,7 @@ const AccountDetail = ({ account }) => {
   }
 
   // Format dates for display
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string): string => {
     const date = new Date(dateString + 'Z');
     if (date.getTime() === 0) {
       return '-';
@@ -25,11 +30,11 @@ const AccountDetail = ({ account }) => {
   };
 
   // Format ZTR token amounts
-  const formatToken = (tokenData) => {
+  const formatToken = (tokenData: Asset | string | undefined): string => {
     if (!tokenData) return '0.000';
 
     // Handle new format: {amount: "0", precision: 3, nai: "..."}
-    if (typeof tokenData === 'object' && tokenData.amount !== undefined) {
+    if (typeof tokenData === 'object' && 'amount' in tokenData) {
       const amount = parseInt(tokenData.amount);
       const precision = tokenData.precision || 3;
       const value = amount / Math.pow(10, precision);
@@ -54,10 +59,10 @@ const AccountDetail = ({ account }) => {
   const votingPower = ((account.voting_power || 0) / 100).toFixed(2);
 
   // Calculate reputation score
-  const calculateReputation = (rep) => {
+  const calculateReputation = (rep: string | undefined): number => {
     if (rep == null) return 25;
     let reputation = parseInt(rep);
-    let isNeg = reputation < 0;
+    const isNeg = reputation < 0;
     reputation = Math.log10(Math.abs(reputation)) - 9;
     reputation = Math.max(reputation * 9 + 25, 0);
     if (isNeg) reputation = 50 - reputation;
@@ -71,11 +76,11 @@ const AccountDetail = ({ account }) => {
       className="account-detail"
       title={`@${account.name}`}
       backTo="/"
-      actions={(
+      actions={
         <div className="reputation-badge">
           {t('account.reputation')}: {reputation}
         </div>
-      )}
+      }
     >
       <div className="detail-section">
         <h3>{t('account.profileInfo')}</h3>
@@ -108,7 +113,12 @@ const AccountDetail = ({ account }) => {
             <div className="detail-item">
               <span className="label">{t('account.website')}:</span>
               <span className="value">
-                <a href={metadata.profile.website} target="_blank" rel="noopener noreferrer" className="external-link">
+                <a
+                  href={metadata.profile.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="external-link"
+                >
                   {metadata.profile.website}
                 </a>
               </span>
@@ -200,10 +210,7 @@ const AccountDetail = ({ account }) => {
           <div className="detail-item">
             <span className="label">{t('account.recoveryAccount')}:</span>
             <span className="value">
-              <Link
-                to={`/account/${account.recovery_account}`}
-                className="internal-link"
-              >
+              <Link to={`/account/${account.recovery_account}`} className="internal-link">
                 @{account.recovery_account}
               </Link>
             </span>

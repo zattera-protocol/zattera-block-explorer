@@ -2,15 +2,16 @@ import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { getLatestBlockNum, getBlocks } from '../services/zatteraApi';
 import { BlockListSkeleton } from './SkeletonLoader';
-import { useTranslation } from '../i18n.jsx';
+import { useTranslation } from '../i18n';
 import { formatTimestampWithLocale } from '../utils/format';
+import type { Block } from '../types';
 import './BlockList.css';
 
 const BlockList = () => {
-  const [blocks, setBlocks] = useState([]);
+  const [blocks, setBlocks] = useState<Block[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [latestBlock, setLatestBlock] = useState(null);
+  const [error, setError] = useState<string | null>(null);
+  const [latestBlock, setLatestBlock] = useState<number | null>(null);
   const { t, language } = useTranslation();
 
   const loadBlocks = useCallback(async () => {
@@ -21,7 +22,7 @@ const BlockList = () => {
       setBlocks(blockData);
       setLoading(false);
     } catch (err) {
-      setError(err.message);
+      setError((err as Error).message);
       setLoading(false);
     }
   }, []);
@@ -36,7 +37,7 @@ const BlockList = () => {
   }, [loadBlocks]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
-  const formatTimestamp = (timestamp) => formatTimestampWithLocale(timestamp, language);
+  const formatTimestamp = (timestamp: string) => formatTimestampWithLocale(timestamp, language);
 
   if (loading) {
     return <BlockListSkeleton />;
@@ -68,8 +69,8 @@ const BlockList = () => {
           {blocks.map((block, index) => (
             <tr key={index}>
               <td>
-                <Link to={`/block/${latestBlock - index}`} className="block-link">
-                  {latestBlock - index}
+                <Link to={`/block/${(latestBlock || 0) - index}`} className="block-link">
+                  {(latestBlock || 0) - index}
                 </Link>
               </td>
               <td>{formatTimestamp(block.timestamp)}</td>

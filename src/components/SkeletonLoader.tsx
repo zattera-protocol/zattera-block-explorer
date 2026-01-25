@@ -1,6 +1,7 @@
 import './SkeletonLoader.css';
-import { useTranslation } from '../i18n.jsx';
+import { useTranslation } from '../i18n';
 import { Link } from 'react-router-dom';
+import type { CSSProperties } from 'react';
 
 export const BlockListSkeleton = () => {
   const { t } = useTranslation();
@@ -139,7 +140,7 @@ export const DashboardSkeleton = () => {
         <div className="blocks-table">
           <div
             className="table-header"
-            style={{ '--block-table-template': '150px 220px 1fr 140px' }}
+            style={{ '--block-table-template': '150px 220px 1fr 140px' } as CSSProperties}
           >
             <div>{t('common.blockNumber')}</div>
             <div>{t('common.time')}</div>
@@ -150,7 +151,7 @@ export const DashboardSkeleton = () => {
             <div
               key={index}
               className="table-row"
-              style={{ '--block-table-template': '150px 220px 1fr 140px' }}
+              style={{ '--block-table-template': '150px 220px 1fr 140px' } as CSSProperties}
             >
               <div className="block-number">
                 <span className="skeleton skeleton-text skeleton-block-num"></span>
@@ -204,7 +205,7 @@ export const BlocksPageSkeleton = () => {
       <div className="blocks-table">
         <div
           className="table-header"
-          style={{ '--block-table-template': '150px 220px 1fr 140px 120px' }}
+          style={{ '--block-table-template': '150px 220px 1fr 140px 120px' } as CSSProperties}
         >
           <div>{t('common.blockNumber')}</div>
           <div>{t('common.time')}</div>
@@ -216,7 +217,7 @@ export const BlocksPageSkeleton = () => {
           <div
             key={index}
             className="table-row"
-            style={{ '--block-table-template': '150px 220px 1fr 140px 120px' }}
+            style={{ '--block-table-template': '150px 220px 1fr 140px 120px' } as CSSProperties}
           >
             <div className="block-number">
               <span className="skeleton skeleton-text skeleton-block-num"></span>
@@ -331,16 +332,54 @@ export const PostsPageSkeleton = () => {
         <h1 className="posts-title">{t('posts.title')}</h1>
         <div className="sort-buttons">
           <button className="sort-button active" disabled>
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-            {' '}{t('posts.trending')}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+              <polyline points="17 6 23 6 23 12"></polyline>
+            </svg>{' '}
+            {t('posts.trending')}
           </button>
           <button className="sort-button" disabled>
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            {' '}{t('posts.latest')}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>{' '}
+            {t('posts.latest')}
           </button>
           <button className="sort-button" disabled>
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
-            {' '}{t('posts.hot')}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path>
+            </svg>{' '}
+            {t('posts.hot')}
           </button>
         </div>
       </div>

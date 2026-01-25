@@ -1,12 +1,16 @@
-import { useState } from 'react';
-import { useTranslation } from '../i18n.jsx';
+import { useState, type FormEvent, type ChangeEvent } from 'react';
+import { useTranslation } from '../i18n';
 import './SearchBar.css';
 
-const SearchBar = ({ onSearch }) => {
+interface SearchBarProps {
+  onSearch: (value: string) => void;
+}
+
+const SearchBar = ({ onSearch }: SearchBarProps) => {
   const [searchValue, setSearchValue] = useState('');
   const { t } = useTranslation();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchValue.trim()) {
       onSearch(searchValue.trim());
@@ -20,7 +24,7 @@ const SearchBar = ({ onSearch }) => {
           type="text"
           placeholder={t('searchBar.placeholder')}
           value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
           className="search-input"
         />
         <button type="submit" className="search-button">

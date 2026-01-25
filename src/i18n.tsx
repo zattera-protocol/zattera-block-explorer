@@ -1,7 +1,154 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import type { SupportedLanguage, LanguageOption } from './types';
 
-const translations = {
+// Type for translation parameters
+type TranslationParams = Record<string, string | number>;
+
+// Type for translation function
+type TranslationFunction = (key: string, params?: TranslationParams) => string;
+
+// Context type
+interface LanguageContextType {
+  language: SupportedLanguage;
+  t: TranslationFunction;
+  setLanguage: (lang: SupportedLanguage) => void;
+}
+
+// Translation structure type
+interface TranslationStructure {
+  sidebar: {
+    dashboard: string;
+    blocks: string;
+    witnesses: string;
+    posts: string;
+    language: string;
+  };
+  common: {
+    time: string;
+    transactions: string;
+    witness: string;
+    blockNumber: string;
+    size: string;
+    search: string;
+    loading: string;
+    page: string;
+    latestBlock: string;
+    none: string;
+    back: string;
+  };
+  searchBar: {
+    placeholder: string;
+    button: string;
+  };
+  dashboard: {
+    title: string;
+    loading: string;
+    stats: {
+      latestBlock: string;
+      currentLiquidSupply: string;
+      virtualLiquidSupply: string;
+      totalVesting: string;
+      liquidPerVests: string;
+    };
+    recentBlocks: string;
+    emptyBlocks: string;
+  };
+  blockList: {
+    title: string;
+    latest: string;
+  };
+  blocksPage: {
+    title: string;
+    searchPlaceholder: string;
+    searchButton: string;
+    infoLatest: string;
+    infoPage: string;
+    txCount: string;
+    blockSize: string;
+    empty: string;
+    paginationPrev: string;
+    paginationNext: string;
+    loading: string;
+  };
+  blockDetail: {
+    info: string;
+    status: string;
+    irreversible: string;
+    reversible: string;
+    time: string;
+    witness: string;
+    transactionCount: string;
+    prevHash: string;
+    merkle: string;
+    transactions: string;
+    noTransactions: string;
+    rawJson: string;
+    previousBlock: string;
+    nextBlock: string;
+  };
+  witnesses: {
+    title: string;
+    loading: string;
+    total: string;
+    votes: string;
+    price: string;
+    blockSize: string;
+    accountCreation: string;
+    website: string;
+    signingKey: string;
+    active: string;
+    top20: string;
+    timeshare: string;
+  };
+  posts: {
+    title: string;
+    loading: string;
+    trending: string;
+    latest: string;
+    hot: string;
+    empty: string;
+    votes: string;
+    replies: string;
+    loadMore: string;
+    loadingMore: string;
+  };
+  account: {
+    profileInfo: string;
+    balances: string;
+    activity: string;
+    security: string;
+    rawJson: string;
+    accountId: string;
+    created: string;
+    lastActive: string;
+    displayName: string;
+    location: string;
+    website: string;
+    about: string;
+    ztrBalance: string;
+    zatteraPower: string;
+    zbdBalance: string;
+    savingsZtr: string;
+    savingsZbd: string;
+    pendingZtr: string;
+    pendingZbd: string;
+    pendingZp: string;
+    postCount: string;
+    votingPower: string;
+    followingCount: string;
+    followersCount: string;
+    witnessVotes: string;
+    votingProxy: string;
+    recoveryAccount: string;
+    memoKey: string;
+    reputation: string;
+  };
+}
+
+type Translations = Record<SupportedLanguage, TranslationStructure>;
+
+const translations: Translations = {
   en: {
     sidebar: {
       dashboard: 'Dashboard',
@@ -391,18 +538,29 @@ const translations = {
   },
 };
 
-const LanguageContext = createContext({
+const LanguageContext = createContext<LanguageContextType>({
   language: 'en',
-  t: (key, params) => key + JSON.stringify(params),
+  t: (key) => key,
   setLanguage: () => {},
 });
 
-const getNested = (obj, path) => path.split('.').reduce((acc, key) => acc && acc[key] !== undefined ? acc[key] : undefined, obj);
+const getNested = (obj: unknown, path: string): unknown => {
+  return path.split('.').reduce((acc: unknown, key: string) => {
+    if (acc && typeof acc === 'object' && key in acc) {
+      return (acc as Record<string, unknown>)[key];
+    }
+    return undefined;
+  }, obj);
+};
 
-export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState(() => {
+interface LanguageProviderProps {
+  children: ReactNode;
+}
+
+export const LanguageProvider = ({ children }: LanguageProviderProps) => {
+  const [language, setLanguage] = useState<SupportedLanguage>(() => {
     if (typeof window === 'undefined') return 'en';
-    const stored = window.localStorage.getItem('language');
+    const stored = window.localStorage.getItem('language') as SupportedLanguage | null;
     if (stored && translations[stored]) return stored;
     return 'en';
   });
@@ -413,28 +571,32 @@ export const LanguageProvider = ({ children }) => {
     }
   }, [language]);
 
-  const t = useMemo(() => (key, params = {}) => {
-    const value = getNested(translations[language], key) ?? getNested(translations.en, key) ?? key;
-    if (typeof value !== 'string') return value;
-    return value.replace(/\{(\w+)\}/g, (_, k) => (params[k] !== undefined ? params[k] : `{${k}}`));
-  }, [language]);
-
-  const value = useMemo(() => ({
-    language,
-    setLanguage,
-    t,
-  }), [language, t]);
-
-  return (
-    <LanguageContext.Provider value={value}>
-      {children}
-    </LanguageContext.Provider>
+  const t: TranslationFunction = useMemo(
+    () => (key: string, params: TranslationParams = {}) => {
+      const value = getNested(translations[language], key) ?? getNested(translations.en, key) ?? key;
+      if (typeof value !== 'string') return String(value);
+      return value.replace(/\{(\w+)\}/g, (_, k: string) =>
+        params[k] !== undefined ? String(params[k]) : `{${k}}`
+      );
+    },
+    [language]
   );
+
+  const value = useMemo(
+    () => ({
+      language,
+      setLanguage,
+      t,
+    }),
+    [language, t]
+  );
+
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 };
 
 export const useTranslation = () => useContext(LanguageContext);
 
-export const supportedLanguages = [
+export const supportedLanguages: LanguageOption[] = [
   { code: 'en', label: 'English' },
   { code: 'ko', label: '한국어' },
   { code: 'ja', label: '日本語' },

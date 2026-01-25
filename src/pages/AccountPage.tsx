@@ -4,12 +4,13 @@ import { getAccount } from '../services/zatteraApi';
 import AccountDetail from '../components/AccountDetail';
 import DetailLayout from '../components/DetailLayout';
 import { AccountDetailSkeleton } from '../components/SkeletonLoader';
+import type { Account } from '../types';
 
 const AccountPage = () => {
-  const { username } = useParams();
-  const [account, setAccount] = useState(null);
+  const { username } = useParams<{ username: string }>();
+  const [account, setAccount] = useState<Account | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const hasLoaded = useRef(false);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ const AccountPage = () => {
           setAccount(accountData);
         }
       } catch (err) {
-        setError(`Failed to fetch account: ${err.message}`);
+        setError(`Failed to fetch account: ${(err as Error).message}`);
         setAccount(null);
       } finally {
         setLoading(false);
@@ -69,9 +70,7 @@ const AccountPage = () => {
     );
   }
 
-  return (
-    <AccountDetail account={account} />
-  );
+  return <AccountDetail account={account} />;
 };
 
 export default AccountPage;

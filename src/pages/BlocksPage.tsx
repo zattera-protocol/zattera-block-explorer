@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type FormEvent, type ChangeEvent } from 'react';
 import { getLatestBlockNum, getBlocks } from '../services/zatteraApi';
 import BlockTable from '../components/BlockTable';
 import { BlocksPageSkeleton } from '../components/SkeletonLoader';
-import { useTranslation } from '../i18n.jsx';
+import { useTranslation } from '../i18n';
+import type { Block } from '../types';
 import './BlocksPage.css';
 
 function BlocksPage() {
-  const [blocks, setBlocks] = useState([]);
+  const [blocks, setBlocks] = useState<Block[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [latestBlock, setLatestBlock] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -38,7 +39,7 @@ function BlocksPage() {
     return () => clearInterval(interval);
   }, [currentPage]);
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const blockNum = parseInt(searchInput);
     if (!isNaN(blockNum) && blockNum > 0) {
@@ -61,17 +62,17 @@ function BlocksPage() {
             type="text"
             placeholder={t('blocksPage.searchPlaceholder')}
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchInput(e.target.value)}
             className="search-input"
           />
-          <button type="submit" className="search-button">{t('blocksPage.searchButton')}</button>
+          <button type="submit" className="search-button">
+            {t('blocksPage.searchButton')}
+          </button>
         </form>
       </div>
 
       <div className="blocks-info">
-        <div className="info-badge">
-          {t('blocksPage.infoLatest', { num: latestBlock })}
-        </div>
+        <div className="info-badge">{t('blocksPage.infoLatest', { num: latestBlock })}</div>
         <div className="info-badge">
           {t('blocksPage.infoPage', { current: currentPage, total: totalPages.toLocaleString() })}
         </div>
@@ -84,47 +85,52 @@ function BlocksPage() {
             label: t('common.blockNumber'),
             width: '150px',
             className: 'block-number',
-            render: (block) => `#${block.block_num}`,
+            render: (block: Block) => `#${block.block_num}`,
           },
           {
             key: 'timestamp',
             label: t('common.time'),
             width: '220px',
             className: 'block-timestamp',
-            render: (block) => new Date(block.timestamp + 'Z').toLocaleString(language === 'ko' ? 'ko-KR' : language === 'ja' ? 'ja-JP' : undefined),
+            render: (block: Block) =>
+              new Date(block.timestamp + 'Z').toLocaleString(
+                language === 'ko' ? 'ko-KR' : language === 'ja' ? 'ja-JP' : undefined
+              ),
           },
           {
             key: 'witness',
             label: t('common.witness'),
             className: 'block-witness',
-            render: (block) => block.witness || 'N/A',
+            render: (block: Block) => block.witness || 'N/A',
           },
           {
             key: 'txs',
             label: t('common.transactions'),
             width: '140px',
             className: 'block-tx-count',
-            render: (block) => <span className="badge">{block.transactions?.length || 0}</span>,
+            render: (block: Block) => <span className="badge">{block.transactions?.length || 0}</span>,
           },
           {
             key: 'size',
             label: t('common.size'),
             width: '120px',
             className: 'block-size',
-            render: (block) => `${(JSON.stringify(block).length / 1024).toFixed(2)} KB`,
+            render: (block: Block) => `${(JSON.stringify(block).length / 1024).toFixed(2)} KB`,
           },
         ]}
         rows={blocks.filter((block) => block && block.block_num)}
-        rowKey={(block) => block.block_id || block.block_num}
-        rowLink={(block) => `/block/${block.block_num}`}
-        cellLink={(col, block) => (col.key === 'witness' && block.witness ? `/account/${block.witness}` : null)}
+        rowKey={(block: Block) => String(block.block_id || block.block_num)}
+        rowLink={(block: Block) => `/block/${block.block_num}`}
+        cellLink={(col, block: Block) =>
+          col.key === 'witness' && block.witness ? `/account/${block.witness}` : null
+        }
         emptyMessage={t('blocksPage.empty')}
       />
 
       <div className="pagination">
         <button
           className="pagination-button"
-          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+          onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
           disabled={currentPage === 1}
         >
           {t('blocksPage.paginationPrev')}
@@ -134,7 +140,7 @@ function BlocksPage() {
         </span>
         <button
           className="pagination-button"
-          onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+          onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
           disabled={currentPage === totalPages}
         >
           {t('blocksPage.paginationNext')}

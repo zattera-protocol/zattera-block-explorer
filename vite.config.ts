@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '')
 
-  const config = {
+  const config: ReturnType<typeof defineConfig> = {
     plugins: [react()],
     build: {
       outDir: 'build',
@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
         '/rpc': {
           target: env.VITE_ZATTERA_RPC_URL || 'http://localhost:8090',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/rpc/, ''),
+          rewrite: (path: string) => path.replace(/^\/rpc/, ''),
         },
       },
     }

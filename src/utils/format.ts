@@ -1,10 +1,12 @@
-const localeMap = {
+import type { SupportedLanguage } from '../types';
+
+const localeMap: Record<SupportedLanguage, string> = {
   ko: 'ko-KR',
   ja: 'ja-JP',
   en: 'en-US',
 };
 
-export const formatTimestampWithLocale = (timestamp, language = 'en') => {
+export const formatTimestampWithLocale = (timestamp: string | null | undefined, language: SupportedLanguage = 'en'): string => {
   if (!timestamp) return 'N/A';
 
   const locale = localeMap[language] || language || 'en-US';
@@ -12,8 +14,8 @@ export const formatTimestampWithLocale = (timestamp, language = 'en') => {
 };
 
 // Format large numbers with K, M, B suffixes
-export const formatCompactNumber = (num) => {
-  if (typeof num !== 'number' || isNaN(num)) return num;
+export const formatCompactNumber = (num: number | null | undefined): string => {
+  if (typeof num !== 'number' || isNaN(num)) return String(num);
 
   const absNum = Math.abs(num);
 

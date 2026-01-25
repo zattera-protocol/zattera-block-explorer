@@ -1,13 +1,21 @@
 import { Link } from 'react-router-dom';
 import DetailLayout from './DetailLayout';
-import { useTranslation } from '../i18n.jsx';
+import { useTranslation } from '../i18n';
 import { formatTimestampWithLocale } from '../utils/format';
+import type { Block } from '../types';
+import type { MouseEvent } from 'react';
 import './BlockDetail.css';
 
-const BlockDetail = ({ blockNum, block, lastIrreversibleBlockNum }) => {
+interface BlockDetailProps {
+  blockNum: string | undefined;
+  block: Block | null;
+  lastIrreversibleBlockNum: number | null;
+}
+
+const BlockDetail = ({ blockNum, block, lastIrreversibleBlockNum }: BlockDetailProps) => {
   const { t, language } = useTranslation();
   // Format timestamp for display
-  const formatTimestamp = (timestamp) => {
+  const formatTimestamp = (timestamp: string | undefined): string => {
     if (!timestamp) return 'N/A';
     return formatTimestampWithLocale(timestamp, language);
   };
@@ -16,7 +24,7 @@ const BlockDetail = ({ blockNum, block, lastIrreversibleBlockNum }) => {
     return null;
   }
 
-  const blockNumber = parseInt(blockNum, 10);
+  const blockNumber = parseInt(blockNum || '0', 10);
   const transactionCount = block?.transactions?.length || 0;
   const prevBlockNum = blockNumber > 1 ? blockNumber - 1 : null;
   const nextBlockNum = blockNumber + 1;
@@ -29,24 +37,23 @@ const BlockDetail = ({ blockNum, block, lastIrreversibleBlockNum }) => {
       className="block-detail"
       title={`${t('common.blockNumber')} #${blockNumber}`}
       backTo="/blocks"
-      actions={(
+      actions={
         <>
           <Link
             to={prevBlockNum ? `/block/${prevBlockNum}` : '#'}
             className={`nav-button ${prevBlockNum ? '' : 'disabled'}`}
             aria-disabled={!prevBlockNum}
-            onClick={(e) => { if (!prevBlockNum) e.preventDefault(); }}
+            onClick={(e: MouseEvent<HTMLAnchorElement>) => {
+              if (!prevBlockNum) e.preventDefault();
+            }}
           >
             {t('blockDetail.previousBlock')}
           </Link>
-          <Link
-            to={`/block/${nextBlockNum}`}
-            className="nav-button"
-          >
+          <Link to={`/block/${nextBlockNum}`} className="nav-button">
             {t('blockDetail.nextBlock')}
           </Link>
         </>
-      )}
+      }
     >
       <div className="detail-section">
         <h3>{t('blockDetail.info')}</h3>

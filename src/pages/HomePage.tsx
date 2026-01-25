@@ -7,7 +7,7 @@ import PostList from '../components/PostList';
 const HomePage = () => {
   const navigate = useNavigate();
 
-  const handleSearch = (searchValue) => {
+  const handleSearch = (searchValue: string) => {
     // If search value is a number, navigate to block page
     if (/^\d+$/.test(searchValue)) {
       navigate(`/block/${searchValue}`);

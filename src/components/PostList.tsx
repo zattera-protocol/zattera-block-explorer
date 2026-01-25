@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getLatestPosts } from '../services/zatteraApi';
+import type { Post } from '../types';
 import './PostList.css';
 
-const PostList = ({ limit = 10 }) => {
-  const [posts, setPosts] = useState([]);
+interface PostListProps {
+  limit?: number;
+}
+
+const PostList = ({ limit = 10 }: PostListProps) => {
+  const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,11 +32,11 @@ const PostList = ({ limit = 10 }) => {
     fetchPosts();
   }, [limit]);
 
-  const formatTimeAgo = (timestamp) => {
+  const formatTimeAgo = (timestamp: string): string => {
     const now = new Date();
     // Zattera API returns UTC timestamps, add 'Z' to ensure UTC parsing
     const postTime = new Date(timestamp + 'Z');
-    const diffInSeconds = Math.floor((now - postTime) / 1000);
+    const diffInSeconds = Math.floor((now.getTime() - postTime.getTime()) / 1000);
 
     if (diffInSeconds < 60) return `${diffInSeconds}s ago`;
     if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
@@ -39,12 +44,12 @@ const PostList = ({ limit = 10 }) => {
     return `${Math.floor(diffInSeconds / 86400)}d ago`;
   };
 
-  const truncateBody = (body, maxLength = 150) => {
+  const truncateBody = (body: string, maxLength = 150): string => {
     if (body.length <= maxLength) return body;
     return body.substring(0, maxLength) + '...';
   };
 
-  const handleAccountClick = (author) => {
+  const handleAccountClick = (author: string) => {
     navigate(`/account/${author}`);
   };
 
@@ -82,10 +87,7 @@ const PostList = ({ limit = 10 }) => {
         {posts.map((post) => (
           <div key={`${post.author}-${post.permlink}`} className="post-item">
             <div className="post-header">
-              <span
-                className="post-author"
-                onClick={() => handleAccountClick(post.author)}
-              >
+              <span className="post-author" onClick={() => handleAccountClick(post.author)}>
                 @{post.author}
               </span>
               <span className="post-time">{formatTimeAgo(post.created)}</span>
@@ -100,7 +102,8 @@ const PostList = ({ limit = 10 }) => {
                 <span className="stat-icon">👍</span> {post.net_votes}
               </span>
               <span className="stat">
-                <span className="stat-icon">💰</span> ${parseFloat(post.pending_payout_value).toFixed(2)}
+                <span className="stat-icon">💰</span> $
+                {parseFloat(post.pending_payout_value || '0').toFixed(2)}
               </span>
             </div>
           </div>

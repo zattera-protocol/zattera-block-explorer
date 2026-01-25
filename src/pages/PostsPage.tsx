@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { TrendingUp, Clock, Flame, DollarSign, ThumbsUp, MessageCircle } from 'lucide-react';
-import { getDiscussions } from '../services/zatteraApi.js';
+import { getDiscussions } from '../services/zatteraApi';
 import { PostsPageSkeleton } from '../components/SkeletonLoader';
-import { useTranslation } from '../i18n.jsx';
+import { useTranslation } from '../i18n';
 import { formatTimestampWithLocale } from '../utils/format';
+import type { Post, Asset } from '../types';
 import './PostsPage.css';
 
 // Helper function to format asset objects
-const formatAsset = (asset) => {
+const formatAsset = (asset: Asset | string | undefined): string => {
   if (typeof asset === 'string') return asset;
   if (asset && typeof asset === 'object' && 'amount' in asset) {
-    const amount = asset.amount / Math.pow(10, asset.precision);
+    const amount = parseInt(asset.amount) / Math.pow(10, asset.precision);
     const symbol = asset.nai === '@@000000021' ? 'ZTR' : asset.nai === '@@000000013' ? 'ZBD' : '';
     return `${amount.toFixed(asset.precision)} ${symbol}`;
   }
@@ -19,7 +20,7 @@ const formatAsset = (asset) => {
 };
 
 // Helper function to get total payout (pending or already paid)
-const getTotalPayout = (post) => {
+const getTotalPayout = (post: Post): string => {
   // If pending payout exists and is not zero, show it
   const pending = parseFloat(post.pending_payout_value || '0');
   if (pending > 0) {
@@ -39,7 +40,7 @@ const getTotalPayout = (post) => {
 };
 
 function PostsPage() {
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [sortBy, setSortBy] = useState('trending');
@@ -72,7 +73,7 @@ function PostsPage() {
       const morePosts = await getDiscussions(sortBy, {
         limit: 20,
         start_author: lastPost.author,
-        start_permlink: lastPost.permlink
+        start_permlink: lastPost.permlink,
       });
 
       // Remove the first item if it's a duplicate
@@ -128,58 +129,59 @@ function PostsPage() {
             <p>{t('posts.empty')}</p>
           </div>
         ) : (
-          posts.filter(post => post && post.author && post.permlink).map((post) => (
-            <article key={`${post.author}-${post.permlink}`} className="post-card">
-              <div className="post-header">
-                <Link to={`/account/${post.author}`} className="post-author">
-                  @{post.author}
-                </Link>
-                <span className="post-category">{post.category}</span>
-              </div>
-
-              <h2 className="post-title">
-                <a
-                  href={`https://zattera.club${post.url}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {post.title}
-                </a>
-              </h2>
-
-              <div className="post-body">
-                {post.body?.substring(0, 200) || ''}
-                {(post.body?.length || 0) > 200 && '...'}
-              </div>
-
-              <div className="post-footer">
-                <div className="post-stats">
-                  <span className="post-stat">
-                    <DollarSign size={16} strokeWidth={2} /> {getTotalPayout(post)}
-                  </span>
-                  <span className="post-stat">
-                    <ThumbsUp size={16} strokeWidth={2} /> {post.active_votes?.filter(v => v.rshares !== "0" && v.rshares !== 0).length || 0} {t('posts.votes')}
-                  </span>
-                  <span className="post-stat">
-                    <MessageCircle size={16} strokeWidth={2} /> {post.children || 0} {t('posts.replies')}
-                  </span>
+          posts
+            .filter((post) => post && post.author && post.permlink)
+            .map((post) => (
+              <article key={`${post.author}-${post.permlink}`} className="post-card">
+                <div className="post-header">
+                  <Link to={`/account/${post.author}`} className="post-author">
+                    @{post.author}
+                  </Link>
+                  <span className="post-category">{post.category}</span>
                 </div>
-                <div className="post-time">
-                  {formatTimestampWithLocale(post.created, language)}
+
+                <h2 className="post-title">
+                  <a
+                    href={`https://zattera.club${post.url}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {post.title}
+                  </a>
+                </h2>
+
+                <div className="post-body">
+                  {post.body?.substring(0, 200) || ''}
+                  {(post.body?.length || 0) > 200 && '...'}
                 </div>
-              </div>
-            </article>
-          ))
+
+                <div className="post-footer">
+                  <div className="post-stats">
+                    <span className="post-stat">
+                      <DollarSign size={16} strokeWidth={2} /> {getTotalPayout(post)}
+                    </span>
+                    <span className="post-stat">
+                      <ThumbsUp size={16} strokeWidth={2} />{' '}
+                      {post.active_votes?.filter(
+                        (v) => v.rshares !== '0' && v.rshares !== 0
+                      ).length || 0}{' '}
+                      {t('posts.votes')}
+                    </span>
+                    <span className="post-stat">
+                      <MessageCircle size={16} strokeWidth={2} /> {post.children || 0}{' '}
+                      {t('posts.replies')}
+                    </span>
+                  </div>
+                  <div className="post-time">{formatTimestampWithLocale(post.created, language)}</div>
+                </div>
+              </article>
+            ))
         )}
       </div>
 
       {hasMore && posts.length > 0 && (
         <div className="load-more-container">
-          <button
-            className="load-more-button"
-            onClick={loadMorePosts}
-            disabled={loadingMore}
-          >
+          <button className="load-more-button" onClick={loadMorePosts} disabled={loadingMore}>
             {loadingMore ? t('posts.loadingMore') : t('posts.loadMore')}
           </button>
         </div>

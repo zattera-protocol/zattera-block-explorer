@@ -1,5 +1,15 @@
 import { Link } from 'react-router-dom';
-import { useTranslation } from '../i18n.jsx';
+import { useTranslation } from '../i18n';
+import type { ReactNode } from 'react';
+
+interface DetailLayoutProps {
+  title: string;
+  backTo?: string;
+  onBack?: () => void;
+  actions?: ReactNode;
+  className?: string;
+  children: ReactNode;
+}
 
 const DetailLayout = ({
   title,
@@ -8,7 +18,7 @@ const DetailLayout = ({
   actions,
   className = '',
   children,
-}) => {
+}: DetailLayoutProps) => {
   const { t } = useTranslation();
 
   const renderBackButton = () => {

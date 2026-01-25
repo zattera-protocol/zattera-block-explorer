@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getWitnessesByVote } from '../services/zatteraApi.js';
+import { getWitnessesByVote } from '../services/zatteraApi';
 import { WitnessesPageSkeleton } from '../components/SkeletonLoader';
-import { useTranslation } from '../i18n.jsx';
+import { useTranslation } from '../i18n';
+import type { Witness, Asset } from '../types';
 import './WitnessesPage.css';
 
 // Helper function to format asset objects
-const formatAsset = (asset) => {
+const formatAsset = (asset: Asset | string | undefined): string => {
   if (typeof asset === 'string') return asset;
   if (asset && typeof asset === 'object' && 'amount' in asset) {
-    const amount = asset.amount / Math.pow(10, asset.precision);
+    const amount = parseInt(asset.amount) / Math.pow(10, asset.precision);
     const symbol = asset.nai === '@@000000021' ? 'ZTR' : 'ZBD';
     return `${amount.toFixed(asset.precision)} ${symbol}`;
   }
@@ -17,7 +18,7 @@ const formatAsset = (asset) => {
 };
 
 function WitnessesPage() {
-  const [witnesses, setWitnesses] = useState([]);
+  const [witnesses, setWitnesses] = useState<Witness[]>([]);
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
 
@@ -46,9 +47,7 @@ function WitnessesPage() {
     <div className="witnesses-page">
       <div className="witnesses-header">
         <h1 className="witnesses-title">{t('witnesses.title')}</h1>
-        <div className="witnesses-info">
-          {t('witnesses.total', { count: witnesses.length })}
-        </div>
+        <div className="witnesses-info">{t('witnesses.total', { count: witnesses.length })}</div>
       </div>
 
       <div className="witnesses-grid">
@@ -68,7 +67,9 @@ function WitnessesPage() {
                 </div>
                 <div className="witness-detail-item">
                   <span className="detail-label">{t('witnesses.price')}:</span>
-                  <span className="detail-value">{formatAsset(witness.dollar_exchange_rate?.base)}</span>
+                  <span className="detail-value">
+                    {formatAsset(witness.dollar_exchange_rate?.base)}
+                  </span>
                 </div>
                 <div className="witness-detail-item">
                   <span className="detail-label">{t('witnesses.blockSize')}:</span>
