@@ -230,7 +230,7 @@ const translations = {
     },
     account: {
       profileInfo: '프로필 정보',
-      balances: '잔액 정보',
+      balances: '자산 정보',
       activity: '활동 통계',
       security: '보안 정보',
       rawJson: '원본 JSON 데이터',

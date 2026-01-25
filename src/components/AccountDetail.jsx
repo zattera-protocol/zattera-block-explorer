@@ -17,7 +17,11 @@ const AccountDetail = ({ account }) => {
 
   // Format dates for display
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString();
+    const date = new Date(dateString + 'Z');
+    if (date.getTime() === 0) {
+      return '-';
+    }
+    return date.toLocaleString();
   };
 
   // Format ZTR token amounts
